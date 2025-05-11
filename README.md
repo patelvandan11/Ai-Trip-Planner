@@ -1,43 +1,86 @@
-# AI Trip Planner
+# 🌍 AI Trip Planner
 
-A smart travel planning application that helps users create personalized itineraries using artificial intelligence.
+> An intelligent travel companion that creates personalized itineraries using AI technology.
+![Trip Planner - Your AI Travel Companion](git.png)
+*AI Trip Planner helps you create personalized travel itineraries with intelligent recommendations and real-time weather updates.(Ongoing)*
+[![Made with React](https://img.shields.io/badge/Made%20with-React-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
+[![API](https://img.shields.io/badge/API-FastAPI-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![AI](https://img.shields.io/badge/AI-OpenAI%20GPT-412991?style=flat-square&logo=openai)](https://openai.com/)
 
-## Features
+## ✨ Features
 
-- Personalized travel recommendations
-- Intelligent itinerary generation
-- Budget optimization
-- Points of interest suggestions
-- Weather-aware planning
-- Real-time updates
+- 🌤️ Real-time weather forecasts for destinations
+- 🤖 AI-powered intelligent trip planning
+- 💬 Interactive chat interface
+- ⚙️ Customizable travel preferences
 
-## Getting Started
+## 🛠️ Tech Stack
 
-### Prerequisites
+- **Frontend:** React.js
+- **Backend:** FastAPI (Python)
+- **AI Engine:** OpenAI GPT
+- **External APIs:** Weather Integration
 
-- Node.js v16 or higher
-- Python 3.8+
-- OpenAI API key
+## 🚀 Getting Started
 
-### Installation
+### Backend Setup
 
-```bash
-git clone https://github.com/yourusername/ai-trip-planner.git
-cd ai-trip-planner
-bun install
-```
+1. Clone and navigate:
+   ```bash
+   cd Ai-Trip-Planner/Backend
+   ```
 
-## Usage
+2. Set up virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
+   ```
 
-1. Set up your environment variables
-2. Start the application
-3. Input your travel preferences
-4. Get AI-generated travel plans
+3. Install requirements:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Contributing
+4. Configure environment:
+   ```env
+   WEATHER_API_KEY=your_weather_api_key
+   OPENAI_API_KEY=your_openai_api_key
+   MODEL_ID=your_model_id
+   ```
 
-Pull requests are welcome. For major changes, please open an issue first.
+5. Launch server:
+   ```bash
+   uvicorn main:app --reload
+   ```
 
-## License
+### Frontend Setup
 
-[MIT](https://choosealicense.com/licenses/mit/)
+1. Navigate to frontend:
+   ```bash
+   cd Ai-Trip-Planner/Frontend
+   ```
+
+2. Install packages:
+   ```bash
+   npm install
+   ```
+
+3. Start development:
+   ```bash
+   npm run dev
+   ```
+
+## 🔑 Environment Variables
+
+Required environment variables:
+- `WEATHER_API_KEY`: OpenWeatherMap API key
+- `OPENAI_API_KEY`: OpenAI API key
+- `MODEL_ID`: OpenAI model identifier
+
+## 🤝 Contributing
+
+Your contributions are welcome! Feel free to submit issues and enhancement requests.
+
+## 📝 License
+
+[MIT License](LICENSE)
