@@ -9,7 +9,7 @@ import os
 from models.finetune.fine_final import ItineraryRequest
 from typing import Optional
 # Load environment variables
-API_KEY = ""  # Replace with your weather API key
+API_KEY = "2"  # Replace with your weather API key
 model_id = ""
 load_dotenv()
 
