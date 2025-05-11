@@ -1,11 +1,9 @@
 # 🌍 AI Trip Planner
 
-> An intelligent travel companion that creates personalized itineraries using AI technology.
-![Trip Planner - Your AI Travel Companion]([git.png](https://github.com/patelvandan11/Ai-Trip-Planner/blob/main/Frontend/public/git.png))
+An intelligent travel companion that creates personalized itineraries using AI technology.
+![Trip Planner - Your AI Travel Companion](Frontend/public/git.png)
 *AI Trip Planner helps you create personalized travel itineraries with intelligent recommendations and real-time weather updates.(Ongoing)*
-[![Made with React](https://img.shields.io/badge/Made%20with-React-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
-[![API](https://img.shields.io/badge/API-FastAPI-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![AI](https://img.shields.io/badge/AI-OpenAI%20GPT-412991?style=flat-square&logo=openai)](https://openai.com/)
+ 
 
 ## ✨ Features
 
