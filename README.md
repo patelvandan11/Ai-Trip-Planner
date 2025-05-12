@@ -79,6 +79,3 @@ Required environment variables:
 
 Your contributions are welcome! Feel free to submit issues and enhancement requests.
 
-## 📝 License
-
-[MIT License](LICENSE)
