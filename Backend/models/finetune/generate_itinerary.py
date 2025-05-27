@@ -10,7 +10,7 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Use fine-tuned model or fallback
-fine_tune_model = os.getenv("FINE_TUNE_MODEL")
+# fine_tune_model = os.getenv("FINE_TUNE_MODEL")
 
 def generate_itinerary(data: Dict) -> Dict:
     """
@@ -48,7 +48,7 @@ Please include:
 6. Any special considerations based on the travel style and children status
 """
         response = openai.ChatCompletion.create(
-            model=fine_tune_model,
+            model="ft:gpt-4o-mini-2024-07-18:personal:ai-trip-planner-final:BTKhoUKU",
             messages=[
                 {"role": "system", "content": "You are an AI travel assistant specializing in creating detailed, personalized travel itineraries."},
                 {"role": "user", "content": prompt}
