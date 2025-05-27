@@ -1,32 +1,33 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import requests
 from pydantic import BaseModel
 import openai
 from dotenv import load_dotenv
 import os
-from models.finetune.fine_final import ItineraryRequest
-from typing import Optional
-# Load environment variables
-API_KEY = "2"  # Replace with your weather API key
-model_id = ""
+import requests
+from models.finetune.generate_itinerary import generate_itinerary  # Renamed for clarity
+from typing import Optional,TypedDict
+
+# Load environment variables from .env
 load_dotenv()
 
-# Load environment variables
+# Set API keys from environment
+API_KEY = os.getenv("API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 app = FastAPI()
 
-# Enable CORS
+# Enable CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Add your frontend URL
+    allow_origins=["http://localhost:5173"],  # Frontend origin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-openai.api_key="OPENAI_API_KEY"
 
- 
+# Weather endpoint
 @app.get("/weather/{city}")
 async def get_weather(city: str):
     if not city:
@@ -36,9 +37,9 @@ async def get_weather(city: str):
 
     try:
         response = requests.get(url)
-        response.raise_for_status()  
-
+        response.raise_for_status()
         data = response.json()
+
         if "main" not in data or "weather" not in data:
             return {"error": "Unexpected response from weather API"}
 
@@ -54,6 +55,8 @@ async def get_weather(city: str):
         return {"error": "Weather API error"}
     except Exception as e:
         return {"error": str(e)}
+
+# Chat endpoint
 class Message(BaseModel):
     message: str
 
@@ -73,11 +76,12 @@ async def chat_endpoint(message: Message):
         return {"reply": reply}
     except Exception as e:
         print("OpenAI Error:", e)
-        return {"reply": f"Sorry, {e}I couldn't process your request at the moment."}
-# Define request model
-# class TripRequest(BaseModel):
+        return {"reply": f"Sorry, I couldn't process your request at the moment. {e}"}
+
+# Trip itinerary endpoint
+class TripRequest(BaseModel):
     destination: str
-    budget: int
+    budget: float
     days: int
     startDate: str
     endDate: str
@@ -85,7 +89,30 @@ async def chat_endpoint(message: Message):
     requirement: str
     child: bool
 
-
+@app.post("/trip/itinerary")
+async def create_trip_itinerary(trip: TripRequest):
+    try:
+        # Validate dates
+        if trip.startDate > trip.endDate:
+            raise HTTPException(status_code=400, detail="Start date cannot be after end date")
+        
+        # Validate days
+        if trip.days <= 0:
+            raise HTTPException(status_code=400, detail="Number of days must be positive")
+            
+        # Validate budget
+        if trip.budget <= 0:
+            raise HTTPException(status_code=400, detail="Budget must be positive")
+            
+        result = generate_itinerary(trip.model_dump())   
+        if "error" in result:
+            raise HTTPException(status_code=500, detail=result["error"])
+        return {"itinerary": result["itinerary"]}
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        print("Error creating itinerary:", e)
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
