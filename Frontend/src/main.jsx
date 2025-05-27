@@ -11,6 +11,7 @@ import Form from './components/custom/Form.jsx'
 import Login from './components/custom/Login'
 import SignUp from './components/custom/SignUp'
 import Finetune from './components/custom/Finetune.jsx'
+import Itinerary from './components/custom/Itinerary.jsx'
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: '/finetune',
     element: <Finetune />
+  },
+  {
+    path: '/iterary',
+    element: < Itinerary/>
   }
 ])
 
@@ -50,3 +55,4 @@ createRoot(document.getElementById('root')).render(
     <Chatbot />
   </StrictMode>
 )
+
