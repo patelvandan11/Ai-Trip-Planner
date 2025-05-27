@@ -38,11 +38,33 @@ function Form() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
-      const res = await axios.post("http://localhost:8000/api/plan", formData);
-      console.log("Response:", res.data);
+      const formattedData = {
+        ...formData,
+        startDate: formData.startDate.toISOString().split('T')[0],
+        endDate: formData.endDate.toISOString().split('T')[0]
+      };
+      
+      const response = await axios.post("http://localhost:8000/trip/itinerary", formattedData);
+      
+      if (response.data && response.data.itinerary) {
+        setItinerary(response.data.itinerary);
+        navigate('/iterary', { 
+          state: { 
+            itinerary: response.data.itinerary,
+            tripDetails: formattedData 
+          } 
+        });
+      } else {
+        setError("Failed to generate itinerary. Please try again.");
+      }
     } catch (error) {
       console.error("Error:", error);
+      setError(error.response?.data?.detail || "Failed to generate itinerary. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
