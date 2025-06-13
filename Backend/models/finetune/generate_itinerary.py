@@ -1,8 +1,8 @@
 import openai
 import os
 from dotenv import load_dotenv
-from typing import Dict
-
+from typing import Dict, Annotated, Optional, Literal
+from pydantic import BaseModel, Field
 # Load environment variables from .env
 load_dotenv()
 
@@ -11,6 +11,10 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Use fine-tuned model or fallback
 # fine_tune_model = os.getenv("FINE_TUNE_MODEL")
+
+class ItineraryRequest(BaseModel):
+    days: int = Field(..., ge=1, description="Number of days for the trip")
+    
 
 def generate_itinerary(data: Dict) -> Dict:
     """
@@ -57,6 +61,8 @@ Please include:
             temperature=0.7
         )
         reply = response.choices[0].message["content"].strip()
+        
+        
         return {"itinerary": reply}
     except openai.error.AuthenticationError:
         return {"error": "OpenAI API authentication failed. Please check your API key."}
