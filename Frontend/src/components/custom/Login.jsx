@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -7,6 +8,8 @@ const Login = () => {
         rememberMe: false
     });
     const [errors, setErrors] = useState({});
+    const [loginError, setLoginError] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -24,10 +27,29 @@ const Login = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoginError('');
         if (validate()) {
-            console.log('Form submitted:', formData);
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        email: formData.email,
+                        password: formData.password
+                    })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    navigate('/profile');
+                } else {
+                    setLoginError(data.error || 'Login failed');
+                }
+            } catch (err) {
+                setLoginError('Network error');
+            }
         }
     };
 
@@ -58,7 +80,8 @@ const Login = () => {
                         </div>
                     </div>
 
-                    <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick={() => window.location.href = "/"}>Log In</button>
+                    <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Log In</button>
+                    {loginError && <p className="text-red-500 text-xs mt-2 text-center">{loginError}</p>}
                 </form>
                 <p className="mt-4 text-center text-sm text-gray-600">New user? <a href="/signup" className="text-indigo-600 hover:text-indigo-500">Sign up</a></p>
             </div>

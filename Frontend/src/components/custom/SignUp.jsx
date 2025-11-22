@@ -9,6 +9,8 @@ const SignUp = () => {
         agreeToTerms: false
     });
     const [errors, setErrors] = useState({});
+    const [signupError, setSignupError] = useState('');
+    const [signupSuccess, setSignupSuccess] = useState('');
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -29,10 +31,31 @@ const SignUp = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setSignupError('');
+        setSignupSuccess('');
         if (validate()) {
-            console.log('Form submitted:', formData);
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: formData.fullName,
+                        email: formData.email,
+                        password: formData.password
+                    })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    setSignupSuccess('Registration successful! You can now log in.');
+                    // Optionally redirect: window.location.href = '/login';
+                } else {
+                    setSignupError(data.detail || 'Registration failed');
+                }
+            } catch (err) {
+                setSignupError('Network error');
+            }
         }
     };
 
@@ -72,6 +95,8 @@ const SignUp = () => {
                     </div>
 
                     <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Sign Up</button>
+                    {signupError && <p className="text-red-500 text-xs mt-2 text-center">{signupError}</p>}
+                    {signupSuccess && <p className="text-green-600 text-xs mt-2 text-center">{signupSuccess}</p>}
                 </form>
                 <p className="mt-4 text-center text-sm text-gray-600">Already have an account? <a href="/login" className="text-indigo-600 hover:text-indigo-500">Log in</a></p>
             </div>

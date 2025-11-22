@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Button } from '../ui/button';
@@ -17,9 +17,22 @@ function Form() {
     requirement: '',
     child: false
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [itinerary, setItinerary] = useState(null);
+
+  // Auto update endDate based on startDate + days
+  useEffect(() => {
+    if (formData.days && formData.startDate) {
+      const newEndDate = new Date(formData.startDate);
+      newEndDate.setDate(newEndDate.getDate() + parseInt(formData.days));
+      setFormData(prev => ({
+        ...prev,
+        endDate: newEndDate
+      }));
+    }
+  }, [formData.startDate, formData.days]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -46,16 +59,16 @@ function Form() {
         startDate: formData.startDate.toISOString().split('T')[0],
         endDate: formData.endDate.toISOString().split('T')[0]
       };
-      
+
       const response = await axios.post("http://localhost:8000/trip/itinerary", formattedData);
-      
+
       if (response.data && response.data.itinerary) {
         setItinerary(response.data.itinerary);
-        navigate('/iterary', { 
-          state: { 
+        navigate('/iterary', {
+          state: {
             itinerary: response.data.itinerary,
-            tripDetails: formattedData 
-          } 
+            tripDetails: formattedData
+          }
         });
       } else {
         setError("Failed to generate itinerary. Please try again.");
@@ -67,9 +80,6 @@ function Form() {
       setLoading(false);
     }
   };
-
-
-    
 
   return (
     <div className='sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-10'>
@@ -102,7 +112,7 @@ function Form() {
           </div>
 
           <div className="mb-6">
-            <label className="block text-xl font-medium mb-2 text-gray-700">Budget ($) *</label>
+            <label className="block text-xl font-medium mb-2 text-gray-700">Budget (₹) *</label>
             <input
               type="number"
               name="budget"
@@ -213,8 +223,8 @@ function Form() {
           </div>
 
           <div className="flex justify-center mt-6">
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={loading}
               className="text-white bg-blue-600 md:text-base px-4 py-2 md:px-6 md:py-3 rounded-lg transition-all hover:scale-105 hover:bg-blue-700 disabled:opacity-50"
             >

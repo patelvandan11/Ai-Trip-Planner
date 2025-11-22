@@ -12,6 +12,7 @@ import Login from "../components/custom/Login.jsx";
 import ResetPassword from "../components/custom/ResetPass.jsx";
 import EmailVerify from "../components/custom/EmailVerify.jsx";
 import OurStory from "../components/custom/OurStory.jsx";
+import Profile from "../components/custom/Profile.jsx";
 
 const AppRoutes = () => {
   return (
@@ -21,6 +22,7 @@ const AppRoutes = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/email-verify" element={<EmailVerify />} />
       <Route path="/our-story" element={<OurStory />} />
+      <Route path="/profile" element={<Profile />} />
 
       {/* Trip */}
       <Route path="/create-trip" element={<CreateTrip />} />
