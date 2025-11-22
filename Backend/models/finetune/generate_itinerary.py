@@ -36,7 +36,7 @@ def generate_itinerary(data: Dict) -> Dict:
         prompt = f"""
 Create a detailed day-by-day itinerary for:
 - Destination: {data.get('destination')}
-- Budget: ${data.get('budget')}
+- Budget: ₹ {data.get('budget')}
 - Duration: {data.get('days')} days
 - Travel Dates: {data.get('startDate')} to {data.get('endDate')}
 - Transportation: {data.get('transport')}
@@ -50,6 +50,9 @@ Please include:
 4. Transportation details between locations
 5. Dining recommendations
 6. Any special considerations based on the travel style and children status
+7. Currency should be mentioned in INR (Indian Rupees) for all costs.
+
+
 """
         response = openai.ChatCompletion.create(
             model="ft:gpt-4o-mini-2024-07-18:personal:ai-trip-planner-final:BTKhoUKU",
